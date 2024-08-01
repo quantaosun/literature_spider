@@ -1,13 +1,12 @@
-# PubMed Literature Search
+# Literature Spider
 
-This tool allows you to search PubMed for academic articles based on your keywords. Please follow the instructions below to use the tool.
 
-## Instructions:
+[![Streamlit](https://img.shields.io/badge/Streamlit-Live%20App-brightgreen)](https://literature-spider.streamlit.app/)
 
-1. **Execute the Setup Cell**: CLick the colab badge, and wait for loading inside the notebook. Run the setup cell below to initialize the search tool. You can execute a cell by clicking on it and then pressing `Shift + Enter` or by clicking the play button on the left side of the cell.
-2. **Enter Your Search Keywords**: After the setup cell has been executed, enter your search keywords in the input box provided.
-3. **Click the "Search" Button**: Click the "Search" button to start the search.
-4. **View the Results**: The search results will be displayed below the button, and a CSV file with the results will be saved.
+This App allows you to search PubMed for academic articles based on your keywords.
+
+
+Alternatively you can use this on google colab
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/quantaosun/literature_spider/blob/main/literaure_spider.ipynb)
 
