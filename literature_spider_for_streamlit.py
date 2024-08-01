@@ -2,6 +2,10 @@ import streamlit as st
 import requests
 from xml.etree import ElementTree
 from datetime import datetime
+import logging
+
+# Set up basic logging
+logging.basicConfig(level=logging.INFO)
 
 # Set page config with title and icon
 st.set_page_config(page_title="Literature Spider", page_icon="🕷️")
@@ -48,6 +52,8 @@ num_articles = st.slider('📑 Number of articles to retrieve', min_value=1, max
 
 # Function to truncate abstracts to 100 words
 def truncate_abstract(abstract):
+    if abstract is None:
+        return "No abstract available"
     words = abstract.split()
     if len(words) > 100:
         return ' '.join(words[:100]) + '...'
@@ -89,14 +95,26 @@ if st.button('Search'):
                         title = detail_root.findtext('.//Item[@Name="Title"]')
                         journal = detail_root.findtext('.//Item[@Name="Source"]')
                         pub_date = detail_root.findtext('.//Item[@Name="PubDate"]')
-                        abstract_response = requests.get(f'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi', params={
-                            'db': 'pubmed',
-                            'id': pmid,
-                            'retmode': 'xml'
-                        })
-                        abstract_root = ElementTree.fromstring(abstract_response.content)
-                        abstract = abstract_root.findtext('.//AbstractText')
-                        truncated_abstract = truncate_abstract(abstract) if abstract else 'No abstract available'
+                        
+                        # Fetch and parse the abstract with error handling
+                        try:
+                            abstract_response = requests.get(f'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi', params={
+                                'db': 'pubmed',
+                                'id': pmid,
+                                'retmode': 'xml'
+                            })
+                            # Check if the response is valid XML
+                            logging.info(f"Abstract response: {abstract_response.content[:500]}")  # Log the beginning of the response
+                            abstract_root = ElementTree.fromstring(abstract_response.content)
+                            abstract = abstract_root.findtext('.//AbstractText')
+                            truncated_abstract = truncate_abstract(abstract)
+                        except ElementTree.ParseError as e:
+                            logging.error(f"Failed to parse abstract for PMID {pmid}: {e}")
+                            truncated_abstract = 'Abstract unavailable due to parsing error.'
+                        except Exception as e:
+                            logging.error(f"Error fetching abstract for PMID {pmid}: {e}")
+                            truncated_abstract = 'Abstract unavailable due to error.'
+
                         pubmed_link = f'https://pubmed.ncbi.nlm.nih.gov/{pmid}/'
 
                         articles.append({
@@ -119,14 +137,4 @@ if st.button('Search'):
 
         else:
             st.error("Search failed. Please try again.")
-
-# Adding a claim with a link to GitHub
-st.markdown(
-    """
-    <div style='text-align: center; margin-top: 50px;'>
-        <p>App written by <a href="https://github.com/quantaosun" target="_blank" style="color: #FF6347;">Quantao</a></p>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
 
