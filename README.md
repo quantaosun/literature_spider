@@ -1,7 +1,10 @@
-# Literature Spider
 
 
-[![Streamlit](https://img.shields.io/badge/Streamlit-Live%20App-brightgreen)](https://literature-spider.streamlit.app/)
+
+[![Streamlit](https://img.shields.io/badge/Streamlit-Live%20App-brightgreen)](https://litghtspider-46616781386b.herokuapp.com/)
+
+
+#### Literature Spider
 
 This App allows you to search PubMed for academic articles based on your keywords.
 
