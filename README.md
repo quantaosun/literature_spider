@@ -16,7 +16,8 @@ Alternatively use it locally on your Mac/Linux
 streamlit run literature_spider_for_streamlit.py
 ```
 
-
+## Other links for PubChem spider
+https://github.com/paulamartingonzalez/Targeted_Literature_Reviews_via_webscraping
 
 
 
